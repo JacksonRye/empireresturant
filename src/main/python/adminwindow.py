@@ -1,6 +1,7 @@
 from ui_designs.Ui_adminwindow import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
+from loginwindow import LoginWindow
 
 
 class AdminWindow(QMainWindow, Ui_MainWindow):
@@ -12,6 +13,7 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         super(AdminWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)      # create widgets from Ui_MainWindow
         self.load_tables()      # create tables from database
+        self.actionLog_Out.triggered.connect(self.logout)
 
     def load_tables(self):
         self.connect_database()
@@ -20,6 +22,7 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         self.load_orders_table()
 
     def connect_database(self):
+        # connection to database and open connection
         db = QSqlDatabase.addDatabase('QSQLITE')
         db.setDatabaseName('resturant_database.db')
         db.open()
@@ -48,3 +51,8 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         self.orders_model.select()
 
         self.orders_table_view.setModel(self.orders_model)
+
+    def logout(self):
+        self.loginwindow = LoginWindow()
+        self.loginwindow.show()
+        self.hide()

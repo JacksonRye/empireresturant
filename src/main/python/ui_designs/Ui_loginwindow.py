@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/jackson/Documents/projectempire/src/main/python/loginwindow.ui'
+# Form implementation generated from reading ui file '/home/jackson/Documents/projectempire/src/main/python/ui_designs/loginwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -51,6 +51,10 @@ class Ui_MainWindow(object):
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.login_button)
         self.verticalLayout_2.addLayout(self.formLayout)
         self.verticalLayout.addWidget(self.frame)
+        self.error_label = QtWidgets.QLabel(self.centralwidget)
+        self.error_label.setText("")
+        self.error_label.setObjectName("error_label")
+        self.verticalLayout.addWidget(self.error_label, 0, QtCore.Qt.AlignHCenter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 414, 27))

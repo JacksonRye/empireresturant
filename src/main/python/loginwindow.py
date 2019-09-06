@@ -1,8 +1,6 @@
 from ui_designs.Ui_loginwindow import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from dbhandler import DBHandler
-from saleswindow import SalesWindow
-from adminwindow import AdminWindow
 
 
 class LoginWindow(QMainWindow, Ui_MainWindow):
@@ -29,14 +27,16 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
 
         try:
             if results[0] == 0:
+                from saleswindow import SalesWindow
                 self.saleswindow = SalesWindow(username)
                 self.saleswindow.show()
                 self.hide()
 
             if results[0] == 1:
+                from adminwindow import AdminWindow
                 self.adminwindow = AdminWindow()
                 self.adminwindow.show()
                 self.hide()
 
         except TypeError:
-            print('User Not Found')
+            self.error_label.setText("Invalid Username / Password")
