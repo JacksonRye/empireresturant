@@ -1,7 +1,8 @@
-from ui_designs.Ui_adminwindow import Ui_MainWindow
+from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
+
 from loginwindow import LoginWindow
+from ui_designs.Ui_adminwindow import Ui_MainWindow
 
 
 class AdminWindow(QMainWindow, Ui_MainWindow):

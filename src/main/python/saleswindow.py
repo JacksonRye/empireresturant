@@ -1,6 +1,7 @@
-from ui_designs.Ui_salewindow import Ui_MainWindow
-from loginwindow import LoginWindow
 from PyQt5.QtWidgets import QMainWindow
+
+from loginwindow import LoginWindow
+from ui_designs.Ui_salewindow import Ui_MainWindow
 
 
 class SalesWindow(QMainWindow, Ui_MainWindow):
