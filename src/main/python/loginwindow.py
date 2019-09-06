@@ -1,4 +1,4 @@
-from Ui_loginwindow import Ui_MainWindow
+from ui_designs.Ui_loginwindow import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from dbhandler import DBHandler
 from adminwindow import AdminWindow

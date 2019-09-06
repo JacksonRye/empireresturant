@@ -1,4 +1,4 @@
-from Ui_adminwindow import Ui_MainWindow
+from ui_designs.Ui_adminwindow import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
 
