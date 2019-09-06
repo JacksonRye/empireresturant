@@ -1,6 +1,7 @@
 from ui_designs.Ui_loginwindow import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow
 from dbhandler import DBHandler
+from saleswindow import SalesWindow
 from adminwindow import AdminWindow
 
 
@@ -28,7 +29,9 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
 
         try:
             if results[0] == 0:
-                print('cashier')
+                self.saleswindow = SalesWindow(username)
+                self.saleswindow.show()
+                self.hide()
 
             if results[0] == 1:
                 self.adminwindow = AdminWindow()

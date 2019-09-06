@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>860</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Sales</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QComboBox" name="items_combobox"/>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QWidget" name="widget_2" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item>
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>#</string>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Name</string>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignHCenter">
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
+                   <string>Price</string>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignHCenter">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Qty</string>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignRight">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Total</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QScrollArea" name="products_scroll_area">
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="scrollAreaWidgetContents">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>555</width>
+                  <height>393</height>
+                 </rect>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item alignment="Qt::AlignTop">
+           <widget class="QFrame" name="frame_4">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Total:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="total_label">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignBottom">
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="cancel_button">
+                 <property name="text">
+                  <string>Cancel</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QPushButton" name="done_button">
+                 <property name="text">
+                  <string>Done</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="closing_sales_button">
+                 <property name="text">
+                  <string>Closing Sales</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QPushButton" name="pushButton_4">
+                 <property name="text">
+                  <string>Decorator</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>860</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionLog_Out"/>
+   </widget>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionLog_Out">
+   <property name="text">
+    <string>Log Out</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
