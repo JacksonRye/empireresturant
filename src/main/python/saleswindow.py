@@ -19,8 +19,13 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     context:    The Application context that controls the whole
                 app and contains all resources
     """
+
+    products_in_checkout = set()
+    
     def __init__(self, username, context, *args, **kwargs):
         super(SalesWindow, self).__init__(*args, **kwargs)
+
+
 
         self.username = username
         self.context = context
@@ -28,6 +33,10 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
         self.populate_combobox()
+
+        self.items_combobox.currentIndexChanged[str].connect(self.add_to_checkout)
+        self.done_button.clicked.connect(self.get_product_list)
+
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -60,6 +69,53 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         model.select()
         self.items_combobox.setModel(model)
         self.items_combobox.setModelColumn(column)
+
+    def add_to_checkout(self, product_name):
+        self.get_product_list()
+        for product in self.product_list:
+            if str(product) == product_name and str(product) not in self.products_in_checkout:
+                product.is_active = True                
+                self.products_in_checkout.add(str(product))
+                item = CheckoutFrame(product)
+                item.no_label.setText(str(0))
+                self.checkout_layout.addWidget(item)
+                print(product_name)
+
+# TODO: FIX Widgets positioning in checkout
+
+    def perform_transaction(self):
+        pass
+
+    def clear_screen(self):
+        pass
+
+    def get_product_list(self):
+        with DBHandler(self.context.get_database) as cursor:
+            cursor.execute("SELECT * FROM products")
+            results = cursor.fetchall()
+
+            self.product_list = (self._Product(*value) for _, value in enumerate(results))
+
+
+    class _Product:
+
+        def __init__(self, name, price, remaining_stock):
+            self.name = name
+            self.qty = 0
+            self.price = price
+            self.remaining_stock = remaining_stock
+            self.is_active = False
+            # self.subtotal = self.subtotal
+
+        @property
+        def subtotal(self):
+            return str(self.price * self.qty)
+
+        def __repr__(self):
+            return self.__str__()
+
+        def __str__(self):
+            return str(self.name)
 
 
 
@@ -114,18 +170,20 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
 class CheckoutFrame(QFrame, Ui_checkout_frame):
     
-    number = 0
+    # number = 0
 
     def __init__(self, product, *args, **kwargs):
         super(CheckoutFrame, self).__init__(*args, **kwargs)
+        self.setupUi(self)
 
-        self.number += 1
+        # self.number += 1
         self.name = product.name
         self.price = product.price
         self.qty = product.qty
         self.total = product.subtotal
 
+        # self.no_label.setText(str(self.number))
         self.name_label.setText(self.name)
-        self.price_label.setText(self.price)
-        self.qty_line_edit.setText(self.qty)
-        self.subtotal_label.setText(self.total)
+        self.price_label.setText(str(self.price))
+        self.qty_line_edit.setText(str(self.qty))
+        self.subtotal_label.setText(str(self.total))
