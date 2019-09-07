@@ -50,7 +50,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.to_datetime_edit.setDisplayFormat(_translate("Dialog", "yyyy-mm-dd h:mm AP"))
-        self.from_datetime_edit.setDisplayFormat(_translate("Dialog", "yyyy:mm:dd h:mm AP"))
+        self.to_datetime_edit.setDisplayFormat(_translate("Dialog", "yyyy-MM-dd h:mm AP"))
+        self.from_datetime_edit.setDisplayFormat(_translate("Dialog", "yyyy-MM-dd h:mm AP"))
         self.label_2.setText(_translate("Dialog", "&To"))
         self.label.setText(_translate("Dialog", "&From"))

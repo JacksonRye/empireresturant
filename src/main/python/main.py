@@ -9,9 +9,6 @@ from loginwindow import LoginWindow
 
 class MyApplicationContext(ApplicationContext):
 
-    def __init__(self, *args, **kwargs):
-        super(MyApplicationContext, self).__init__(*args, **kwargs)
-
     @cached_property
     def about_icon(self):
         return QIcon(self.get_resource('images/anchor.png'))
