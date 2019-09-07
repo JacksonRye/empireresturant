@@ -25,8 +25,6 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, username, context, *args, **kwargs):
         super(SalesWindow, self).__init__(*args, **kwargs)
 
-
-
         self.username = username
         self.context = context
         self.setupUi(self)
@@ -71,7 +69,9 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.items_combobox.setModelColumn(column)
 
     def add_to_checkout(self, product_name):
+        # Retrieve current attributes of products
         self.get_product_list()
+        # check if product already in checkout
         for product in self.product_list:
             if str(product) == product_name and str(product) not in self.products_in_checkout:
                 product.is_active = True                
@@ -94,10 +94,15 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             cursor.execute("SELECT * FROM products")
             results = cursor.fetchall()
 
+            # Genexpr to get all items from database
             self.product_list = (self._Product(*value) for _, value in enumerate(results))
 
 
     class _Product:
+        """
+            This is a private class that holds attributes of
+            each product.                
+        """
 
         def __init__(self, name, price, remaining_stock):
             self.name = name
@@ -105,14 +110,10 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             self.price = price
             self.remaining_stock = remaining_stock
             self.is_active = False
-            # self.subtotal = self.subtotal
 
         @property
         def subtotal(self):
             return str(self.price * self.qty)
-
-        def __repr__(self):
-            return self.__str__()
 
         def __str__(self):
             return str(self.name)
@@ -120,9 +121,11 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
 
 class ClosingSalesDialog(QDialog, Ui_Dialog):
+    
     """Dialog that show up when closing sales button is pressed.
         Allows user to selecting duration of closing and prints
         information concerning it."""
+    
     def __init__(self, context, username, *args, **kwargs):
         super(ClosingSalesDialog, self).__init__(*args, **kwargs)
         
@@ -169,8 +172,12 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
     
 
 class CheckoutFrame(QFrame, Ui_checkout_frame):
-    
-    # number = 0
+    """
+        Widget to hold each product in the checkout
+        
+        product:    Instance of _Product class,
+                    contains product metadata.
+    """    
 
     def __init__(self, product, *args, **kwargs):
         super(CheckoutFrame, self).__init__(*args, **kwargs)

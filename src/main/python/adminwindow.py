@@ -14,6 +14,7 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
 
     Seriously aren't the variable names and function names intuitive enough?
     """
+
     def __init__(self, context, *args, **kwargs):
         super(AdminWindow, self).__init__(*args, **kwargs)
         

@@ -36,6 +36,7 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         try:
             if results[0] == 0:
                 from saleswindow import SalesWindow
+                # Create session and all activites will be recorded with `username`
                 self.saleswindow = SalesWindow(username=username, context=self.context)
                 self.saleswindow.show()
                 self.hide()
