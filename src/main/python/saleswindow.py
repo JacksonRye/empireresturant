@@ -44,7 +44,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
             # print('{} to {}'.format(from_date, to_date))
 
-            with DBHandler() as cursor:
+            with DBHandler(self.context.get_database) as cursor:
                 
                 cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
                                 FROM `orders` WHERE username= ? AND

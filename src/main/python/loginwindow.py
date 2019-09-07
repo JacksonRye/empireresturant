@@ -23,7 +23,7 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         username = self.username_line_edit.text()
         password = self.password_line_edit.text()
 
-        with DBHandler() as cursor:
+        with DBHandler(self.context.get_database) as cursor:
             find_user_query = """
             SELECT priviledge FROM users WHERE
             username = ? AND password = ?

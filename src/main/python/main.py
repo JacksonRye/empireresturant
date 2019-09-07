@@ -13,6 +13,10 @@ class MyApplicationContext(ApplicationContext):
     def about_icon(self):
         return QIcon(self.get_resource('images/anchor.png'))
 
+    @cached_property
+    def get_database(self):
+        return self.get_resource('database/resturant_database.db')
+
 
 appctxt = MyApplicationContext()     # 1. Instantiate ApplicationContext
 window = LoginWindow(appctxt)
