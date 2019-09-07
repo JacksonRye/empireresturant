@@ -23,4 +23,4 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.hide()
 
     def select_duration(self):
-        
+        pass
