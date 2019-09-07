@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QDialog, QFrame
+from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
 # import datetime
 # import tempfile
 
@@ -26,6 +27,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
+        self.populate_combobox()
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -44,6 +46,21 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             print('Success!')
         else:
             print("Cancel!")
+    
+    def connect_database(self):
+        db = QSqlDatabase.addDatabase('QSQLITE')
+        db.setDatabaseName(self.context.get_database)
+        db.open()
+        
+    def populate_combobox(self):
+        self.connect_database()
+        model = QSqlTableModel()
+        model.setTable('products')
+        column = model.fieldIndex('name')
+        model.select()
+        self.items_combobox.setModel(model)
+        self.items_combobox.setModelColumn(column)
+
 
 
 class ClosingSalesDialog(QDialog, Ui_Dialog):
@@ -96,6 +113,7 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
     
 
 class CheckoutFrame(QFrame, Ui_checkout_frame):
+    
     number = 0
 
     def __init__(self, product, *args, **kwargs):

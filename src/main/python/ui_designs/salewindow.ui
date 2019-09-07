@@ -34,7 +34,11 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QComboBox" name="items_combobox"/>
+           <widget class="QComboBox" name="items_combobox">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QWidget" name="widget" native="true">
@@ -85,7 +89,7 @@
                <property name="widgetResizable">
                 <bool>true</bool>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents">
+               <widget class="QWidget" name="checkout_widget">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
