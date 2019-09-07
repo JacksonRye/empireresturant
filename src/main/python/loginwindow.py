@@ -33,20 +33,19 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
 
             results = cursor.fetchone()
 
-        # try:
-        if results[0] == 0:
-            from saleswindow import SalesWindow
-            self.saleswindow = SalesWindow(username=username)
-            self.saleswindow.show()
-            self.hide()
+        try:
+            if results[0] == 0:
+                from saleswindow import SalesWindow
+                self.saleswindow = SalesWindow(username=username)
+                self.saleswindow.show()
+                self.hide()
 
-        if results[0] == 1:
-            from adminwindow import AdminWindow
-            self.adminwindow = AdminWindow()
-            self.adminwindow.show()
-            self.hide()
+            if results[0] == 1:
+                from adminwindow import AdminWindow
+                self.adminwindow = AdminWindow()
+                self.adminwindow.show()
+                self.hide()
 
-        # except Exception as e:
-            # print(str(e))
-            # self.error_label.setText(str(e))
+        except TypeError as e:
+            self.error_label.setText(str(e))
             # self.error_label.setText("Invalid Username / Password")
