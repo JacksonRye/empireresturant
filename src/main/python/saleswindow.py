@@ -38,14 +38,17 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             # print('{} to {}'.format(from_date, to_date))
 
             with DBHandler() as cursor:
+                
                 cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
                                 FROM `orders` WHERE username= ? AND
                                 `date` BETWEEN ? AND ?
                                 GROUP BY product_name;""", [self.username, from_date, to_date])
                 
-                print(cursor.fetchall())
+                result = cursor.fetchall()
                 
-                for _, values in enumerate(cursor.fetchall()):
+                print(result)
+
+                for _, values in enumerate(result):
                     print(values)
 
         else:
