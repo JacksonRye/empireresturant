@@ -10,8 +10,10 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
     """
     Ui_MainWindow: Class containing widgets and their respective settings
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, context, *args, **kwargs):
         super(AdminWindow, self).__init__(*args, **kwargs)
+        
+        self.context = context
         self.setupUi(self)      # create widgets from Ui_MainWindow
         self.load_tables()      # create tables from database
         self.actionLog_Out.triggered.connect(self.logout)
@@ -54,6 +56,6 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         self.orders_table_view.setModel(self.orders_model)
 
     def logout(self):
-        self.loginwindow = LoginWindow()
+        self.loginwindow = LoginWindow(context=self.context)
         self.loginwindow.show()
         self.hide()

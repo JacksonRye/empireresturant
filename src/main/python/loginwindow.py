@@ -36,13 +36,13 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         try:
             if results[0] == 0:
                 from saleswindow import SalesWindow
-                self.saleswindow = SalesWindow(username=username)
+                self.saleswindow = SalesWindow(username=username, context=self.context)
                 self.saleswindow.show()
                 self.hide()
 
             if results[0] == 1:
                 from adminwindow import AdminWindow
-                self.adminwindow = AdminWindow()
+                self.adminwindow = AdminWindow(context=self.context)
                 self.adminwindow.show()
                 self.hide()
 

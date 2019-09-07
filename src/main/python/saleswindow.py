@@ -12,16 +12,17 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     username:   current user login, whose name transactions
                 will be carried on with
     """
-    def __init__(self, username, *args, **kwargs):
+    def __init__(self, username, context, *args, **kwargs):
         super(SalesWindow, self).__init__(*args, **kwargs)
 
         self.username = username
+        self.context = context
         self.setupUi(self)
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
 
     def logout(self):
-        self.loginwindow = LoginWindow()
+        self.loginwindow = LoginWindow(self.context)
         self.loginwindow.show()
         self.hide()
 
