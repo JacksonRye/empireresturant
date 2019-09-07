@@ -6,11 +6,18 @@ from ui_designs.Ui_loginwindow import Ui_MainWindow
 
 class LoginWindow(QMainWindow, Ui_MainWindow):
 
-    def __init__(self, *args, **kwargs):
+    """
+    context:    This is the Application instance responsible for running the
+                whole app
+    """
+
+    def __init__(self, context, *args, **kwargs):
         super(LoginWindow, self).__init__(*args, **kwargs)
 
+        self.context = context
         self.setupUi(self)
         self.login_button.clicked.connect(self.authenticate_user)
+        self.actionAbout.setIcon(self.context.about_icon)
 
     def authenticate_user(self):
         username = self.username_line_edit.text()
