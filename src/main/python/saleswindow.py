@@ -28,24 +28,24 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     def select_duration(self):
         dlg = ClosingSalesDialog(self)
         
-        from_ = dlg.from_datetime_edit        
-        to = dlg.to_datetime_edit
+        # from_ = dlg.from_datetime_edit        
+        # to = dlg.to_datetime_edit
 
         if dlg.exec_():
-            from_date = from_.textFromDateTime(from_.dateTime())
-            to_date = to.textFromDateTime(to.dateTime())
+            # from_date = from_.textFromDateTime(from_.dateTime())
+            # to_date = to.textFromDateTime(to.dateTime())
 
             # print('{} to {}'.format(from_date, to_date))
 
             with DBHandler() as cursor:
                 cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
-                                FROM `orders` WHERE username= ? AND
-                                `date` BETWEEN ? AND ?
-                                GROUP BY product_name;""", [self.username, from_date, to_date])
+                                FROM `orders` WHERE username= 'elizabeth' AND
+                                `date` BETWEEN '2019-09-05' AND '2019-09-06'
+                                GROUP BY product_name;""")
                 
-                print(cursor.fetchall())
+                result = cursor.fetchall()
                 
-                for _, values in enumerate(cursor.fetchall()):
+                for _, values in enumerate(result):
                     print(values)
 
         else:
