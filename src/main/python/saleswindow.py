@@ -1,8 +1,11 @@
-from PyQt5.QtWidgets import QMainWindow, QDialog
+from PyQt5.QtWidgets import QMainWindow, QDialog, QFrame
+# import datetime
+# import tempfile
 
 from loginwindow import LoginWindow
 from ui_designs.Ui_salewindow import Ui_MainWindow
 from ui_designs.Ui_closingsalesdialog import Ui_Dialog
+from ui_designs.Ui_checkout_widget import Ui_checkout_frame
 
 from dbhandler import DBHandler
 
@@ -25,6 +28,9 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.loginwindow = LoginWindow(self.context)
         self.loginwindow.show()
         self.hide()
+
+    def checkout(self):
+        pass
 
     def select_duration(self):
         dlg = ClosingSalesDialog(self)
@@ -64,3 +70,20 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
+
+class CheckoutFrame(QFrame, Ui_checkout_frame):
+    number = 0
+
+    def __init__(self, product, *args, **kwargs):
+        super(CheckoutFrame, self).__init__(*args, **kwargs)
+
+        self.number += 1
+        self.name = product.name
+        self.price = product.price
+        self.qty = product.qty
+        self.total = product.subtotal
+
+        self.name_label.setText(self.name)
+        self.price_label.setText(self.price)
+        self.qty_line_edit.setText(self.qty)
+        self.subtotal_label.setText(self.total)
