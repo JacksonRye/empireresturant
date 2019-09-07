@@ -9,6 +9,8 @@ class DBHandler:
 
         Meant to be used as a context manager
 
+        database: location of the sqlite3 database
+
         e.g:
             >>> with DBHandler() as cursor:
             ...     cursor.execute(SQL statement)

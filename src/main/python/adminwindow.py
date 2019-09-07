@@ -8,7 +8,11 @@ from ui_designs.Ui_adminwindow import Ui_MainWindow
 class AdminWindow(QMainWindow, Ui_MainWindow):
 
     """
-    Ui_MainWindow: Class containing widgets and their respective settings
+    Ui_MainWindow:  Class containing widgets and their respective settings
+    context:        This is the overall application context, containing
+                    resources used through out the app.
+
+    Seriously aren't the variable names and function names intuitive enough?
     """
     def __init__(self, context, *args, **kwargs):
         super(AdminWindow, self).__init__(*args, **kwargs)
@@ -31,11 +35,13 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         db.open()
 
     def load_products_table(self):
+        # The model used by the view
         self.product_model = QSqlTableModel()
         self.product_model.setTable('products')
         self.product_model.setEditStrategy(QSqlTableModel.OnFieldChange)
         self.product_model.select()
 
+        # Use the product model as the model. MV programming
         self.product_table_view.setModel(self.product_model)
 
     def load_users_table(self):
@@ -56,6 +62,7 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         self.orders_table_view.setModel(self.orders_model)
 
     def logout(self):
+        # Go to login window
         self.loginwindow = LoginWindow(context=self.context)
         self.loginwindow.show()
         self.hide()

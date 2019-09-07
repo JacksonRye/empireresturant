@@ -14,6 +14,9 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     """
     username:   current user login, whose name transactions
                 will be carried on with
+
+    context:    The Application context that controls the whole
+                app and contains all resources
     """
     def __init__(self, username, context, *args, **kwargs):
         super(SalesWindow, self).__init__(*args, **kwargs)
@@ -33,14 +36,19 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def select_duration(self):
+        """Creates a dialog containg two datetime edit widgets"""
+
         dlg = ClosingSalesDialog(self)
         
         from_ = dlg.from_datetime_edit        
         to = dlg.to_datetime_edit
 
         if dlg.exec_():
-            from_date = from_.textFromDateTime(from_.dateTime())
-            to_date = to.textFromDateTime(to.dateTime())
+            
+            # If you press 'Ok' button I'll run.
+
+            from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
+            to_date = to.textFromDateTime(to.dateTime())            # Ending date
 
             # print('{} to {}'.format(from_date, to_date))
 
@@ -64,12 +72,20 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             print("Cancel!")
 
 class ClosingSalesDialog(QDialog, Ui_Dialog):
+    """Dialog that show up when closing sales button is pressed.
+        Allows user to selecting duration of closing and prints
+        information concerning it."""
     def __init__(self, *args, **kwargs):
         super(ClosingSalesDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
+
+    def accept(self):
+        super().accept()
+
+        
 
 class CheckoutFrame(QFrame, Ui_checkout_frame):
     number = 0
