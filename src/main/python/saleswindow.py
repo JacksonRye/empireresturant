@@ -38,45 +38,24 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     def select_duration(self):
         """Creates a dialog containg two datetime edit widgets"""
 
-        dlg = ClosingSalesDialog(self)
+        dlg = ClosingSalesDialog(self.context, self.username, self)
         
-        from_ = dlg.from_datetime_edit        
-        to = dlg.to_datetime_edit
-
         if dlg.exec_():
-            
-            # If you press 'Ok' button I'll run.
-
-            from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
-            to_date = to.textFromDateTime(to.dateTime())            # Ending date
-
-            # print('{} to {}'.format(from_date, to_date))
-
-            with DBHandler(self.context.get_database) as cursor:
-                
-                cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
-                                FROM `orders` WHERE username= ? AND
-                                `date` BETWEEN ? AND ?
-                                GROUP BY product_name;""", 
-                                
-                                [self.username, from_date, to_date])
-                
-                result = cursor.fetchall()
-                
-                print(result)
-
-                for _, values in enumerate(result):
-                    print(values)
-
+            print('Success!')
         else:
             print("Cancel!")
+
 
 class ClosingSalesDialog(QDialog, Ui_Dialog):
     """Dialog that show up when closing sales button is pressed.
         Allows user to selecting duration of closing and prints
         information concerning it."""
-    def __init__(self, *args, **kwargs):
+    def __init__(self, context, username, *args, **kwargs):
         super(ClosingSalesDialog, self).__init__(*args, **kwargs)
+        
+
+        self.context = context
+        self.username = username
         self.setupUi(self)
 
         self.buttonBox.accepted.connect(self.accept)
@@ -84,8 +63,37 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
     def accept(self):
         super().accept()
+            
+        # If you press 'Ok' button I'll run.
+        from_ = self.from_datetime_edit        
+        to = self.to_datetime_edit
 
         
+
+        from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
+        to_date = to.textFromDateTime(to.dateTime())            # Ending date
+
+        # print('{} to {}'.format(from_date, to_date))
+
+        with DBHandler(self.context.get_database) as cursor:
+            
+            cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
+                            FROM `orders` WHERE username= ? AND
+                            `date` BETWEEN ? AND ?
+                            GROUP BY product_name;""", 
+                            
+                            [self.username, from_date, to_date])
+            
+            result = cursor.fetchall()
+            
+            print(result)
+
+            for _, values in enumerate(result):
+                print(values)
+
+
+
+    
 
 class CheckoutFrame(QFrame, Ui_checkout_frame):
     number = 0
