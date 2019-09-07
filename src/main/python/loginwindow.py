@@ -36,7 +36,7 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         try:
             if results[0] == 0:
                 from saleswindow import SalesWindow
-                self.saleswindow = SalesWindow(username)
+                self.saleswindow = SalesWindow(username=username)
                 self.saleswindow.show()
                 self.hide()
 
@@ -46,5 +46,6 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
                 self.adminwindow.show()
                 self.hide()
 
-        except TypeError:
-            self.error_label.setText("Invalid Username / Password")
+        except TypeError as e:
+            self.error_label.setText(str(e))
+            # self.error_label.setText("Invalid Username / Password")
