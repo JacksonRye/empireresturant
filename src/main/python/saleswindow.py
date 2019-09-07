@@ -4,6 +4,8 @@ from loginwindow import LoginWindow
 from ui_designs.Ui_salewindow import Ui_MainWindow
 from ui_designs.Ui_closingsalesdialog import Ui_Dialog
 
+from dbhandler import DBHandler
+
 
 class SalesWindow(QMainWindow, Ui_MainWindow):
     """
@@ -33,7 +35,18 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             from_date = from_.textFromDateTime(from_.dateTime())
             to_date = to.textFromDateTime(to.dateTime())
 
-            print('{} to {}'.format(from_date, to_date))
+            # print('{} to {}'.format(from_date, to_date))
+
+            with DBHandler() as cursor:
+                cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
+                                FROM `orders` WHERE username= ? AND
+                                `date` BETWEEN ? AND ?
+                                GROUP BY product_name;""", [self.username, from_date, to_date])
+                
+                print(cursor.fetchall())
+                
+                for _, values in enumerate(cursor.fetchall()):
+                    print(values)
 
         else:
             print("Cancel!")
