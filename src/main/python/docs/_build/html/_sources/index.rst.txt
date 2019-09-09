@@ -5,6 +5,11 @@
 
 Welcome to Project Empire's documentation!
 ==========================================
+.. automodule:: saleswindow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 .. toctree::
    :maxdepth: 2
@@ -16,16 +21,6 @@ Welcome to Project Empire's documentation!
     
     saleswindow
         saleswindow.SalesWindow
-
-.. automodule:: saleswindow
-
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-
-
 
 
 Indices and tables
