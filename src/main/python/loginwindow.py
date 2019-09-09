@@ -23,7 +23,7 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         username = self.username_line_edit.text()
         password = self.password_line_edit.text()
 
-        with DBHandler() as cursor:
+        with DBHandler(self.context.get_database) as cursor:
             find_user_query = """
             SELECT priviledge FROM users WHERE
             username = ? AND password = ?
@@ -36,13 +36,14 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         try:
             if results[0] == 0:
                 from saleswindow import SalesWindow
-                self.saleswindow = SalesWindow(username=username)
+                # Create session and all activites will be recorded with `username`
+                self.saleswindow = SalesWindow(username=username, context=self.context)
                 self.saleswindow.show()
                 self.hide()
 
             if results[0] == 1:
                 from adminwindow import AdminWindow
-                self.adminwindow = AdminWindow()
+                self.adminwindow = AdminWindow(context=self.context)
                 self.adminwindow.show()
                 self.hide()
 

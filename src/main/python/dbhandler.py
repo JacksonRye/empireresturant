@@ -1,4 +1,3 @@
-import os
 import sqlite3
 
 
@@ -10,6 +9,8 @@ class DBHandler:
 
         Meant to be used as a context manager
 
+        database: location of the sqlite3 database
+
         e.g:
             >>> with DBHandler() as cursor:
             ...     cursor.execute(SQL statement)
@@ -17,8 +18,11 @@ class DBHandler:
         returns a `cursor` object.
         """
 
+    def __init__(self, database):
+        self.db = database
+
     def __enter__(self):
-        self.conn = sqlite3.connect(os.path.relpath('resturant_database.db'))
+        self.conn = sqlite3.connect(self.db)
         self.cursor = self.conn.cursor()
         return self.cursor
 

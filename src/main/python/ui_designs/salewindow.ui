@@ -34,7 +34,14 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QComboBox" name="items_combobox"/>
+           <widget class="QComboBox" name="items_combobox">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="currentIndex">
+             <number>-1</number>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QWidget" name="widget" native="true">
@@ -42,7 +49,7 @@
              <item>
               <widget class="QWidget" name="widget_2" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
+                <item alignment="Qt::AlignLeft">
                  <widget class="QLabel" name="label_2">
                   <property name="text">
                    <string>#</string>
@@ -56,14 +63,14 @@
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignHCenter">
+                <item alignment="Qt::AlignLeft">
                  <widget class="QLabel" name="label_4">
                   <property name="text">
                    <string>Price</string>
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignHCenter">
+                <item alignment="Qt::AlignLeft">
                  <widget class="QLabel" name="label">
                   <property name="text">
                    <string>Qty</string>
@@ -85,7 +92,7 @@
                <property name="widgetResizable">
                 <bool>true</bool>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents">
+               <widget class="QWidget" name="checkout_widget">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
@@ -94,6 +101,11 @@
                   <height>333</height>
                  </rect>
                 </property>
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <item>
+                  <layout class="QVBoxLayout" name="checkout_layout"/>
+                 </item>
+                </layout>
                </widget>
               </widget>
              </item>
