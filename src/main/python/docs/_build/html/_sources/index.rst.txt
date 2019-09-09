@@ -5,14 +5,26 @@
 
 Welcome to Project Empire's documentation!
 ==========================================
-.. automodule:: loginwindow
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+.. autosummary::
+    loginwindow
+        loginwindow.LoginWindow
+    
+    saleswindow
+        saleswindow.SalesWindow
+
+.. automodule:: saleswindow
+
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+
 
 
 
