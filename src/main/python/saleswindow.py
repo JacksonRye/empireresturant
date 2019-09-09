@@ -21,7 +21,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
     """
 
     products_in_checkout = set()
-    
+
     def __init__(self, username, context, *args, **kwargs):
         super(SalesWindow, self).__init__(*args, **kwargs)
 
@@ -32,9 +32,9 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.closing_sales_button.clicked.connect(self.select_duration)
         self.populate_combobox()
 
-        self.items_combobox.currentIndexChanged[str].connect(self.add_to_checkout)
+        self.items_combobox.currentIndexChanged[str].\
+            connect(self.add_to_checkout)
         self.done_button.clicked.connect(self.get_product_list)
-
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -48,17 +48,17 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         """Creates a dialog containg two datetime edit widgets"""
 
         dlg = ClosingSalesDialog(self.context, self.username, self)
-        
+
         if dlg.exec_():
             print('Success!')
         else:
             print("Cancel!")
-    
+
     def connect_database(self):
         db = QSqlDatabase.addDatabase('QSQLITE')
         db.setDatabaseName(self.context.get_database)
         db.open()
-        
+
     def populate_combobox(self):
         self.connect_database()
         model = QSqlTableModel()
@@ -74,7 +74,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         # check if product already in checkout
         for product in self.product_list:
             if str(product) == product_name and str(product) not in self.products_in_checkout:
-                product.is_active = True                
+                product.is_active = True
                 self.products_in_checkout.add(str(product))
                 item = CheckoutFrame(product)
                 item.no_label.setText(str(0))
@@ -97,12 +97,11 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             # Genexpr to get all items from database
             self.product_list = (self._Product(*value) for _, value in enumerate(results))
 
-
     class _Product:
         """
             This is a private class that holds attributes of
-            each product.                
-        """
+            each product.
+            """
 
         def __init__(self, name, price, remaining_stock):
             self.name = name
@@ -119,16 +118,14 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             return str(self.name)
 
 
-
 class ClosingSalesDialog(QDialog, Ui_Dialog):
-    
+
     """Dialog that show up when closing sales button is pressed.
         Allows user to selecting duration of closing and prints
         information concerning it."""
-    
+
     def __init__(self, context, username, *args, **kwargs):
         super(ClosingSalesDialog, self).__init__(*args, **kwargs)
-        
 
         self.context = context
         self.username = username
@@ -139,12 +136,10 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
     def accept(self):
         super().accept()
-            
-        # If you press 'Ok' button I'll run.
-        from_ = self.from_datetime_edit        
-        to = self.to_datetime_edit
 
-        
+        # If you press 'Ok' button I'll run.
+        from_ = self.from_datetime_edit
+        to = self.to_datetime_edit
 
         from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
         to_date = to.textFromDateTime(to.dateTime())            # Ending date
@@ -152,32 +147,29 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
         # print('{} to {}'.format(from_date, to_date))
 
         with DBHandler(self.context.get_database) as cursor:
-            
+
             cursor.execute("""SELECT product_name, sum(quantity_sold), sum(price)
                             FROM `orders` WHERE username= ? AND
                             `date` BETWEEN ? AND ?
-                            GROUP BY product_name;""", 
-                            
+                            GROUP BY product_name;""",
+
                             [self.username, from_date, to_date])
-            
+
             result = cursor.fetchall()
-            
+
             print(result)
 
             for _, values in enumerate(result):
                 print(values)
 
 
-
-    
-
 class CheckoutFrame(QFrame, Ui_checkout_frame):
     """
         Widget to hold each product in the checkout
-        
+
         product:    Instance of _Product class,
                     contains product metadata.
-    """    
+    """
 
     def __init__(self, product, *args, **kwargs):
         super(CheckoutFrame, self).__init__(*args, **kwargs)
