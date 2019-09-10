@@ -21,6 +21,10 @@ class MyApplicationContext(ApplicationContext):
     def cancel_icon(self):
         return QIcon(self.get_resource('icons/cross-button.png'))
 
+    @cached_property
+    def logout_icon(self):
+        return QIcon(self.get_resource('icons/control-power.png'))
+
 
 appctxt = MyApplicationContext()     # 1. Instantiate ApplicationContext
 window = LoginWindow(appctxt)

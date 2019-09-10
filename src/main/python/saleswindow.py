@@ -32,6 +32,9 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.context = context
         self.setupUi(self)
         self.get_product_list()
+
+        self.username_label.setText(self.username.title())
+        self.actionLog_Out.setIcon(self.context.logout_icon)
         
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
@@ -39,9 +42,6 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
         self.items_combobox.currentTextChanged.connect(self.add_to_checkout)
         self.done_button.clicked.connect(self.checkout)
-        self.decorator_button.clicked.connect(self.calculate_total)
-
-
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -49,8 +49,14 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.hide()
 
     def checkout(self):
-        self.perform_transaction()
-        self.clear_screen()
+        dlg = CheckoutConfirmationDialog(self)
+
+        if dlg.exec_():
+            self.perform_transaction()
+            self.clear_screen()
+            print('Success')
+        else:
+            print('Cancel')
 
     def select_duration(self):
         """Creates a dialog containg two datetime edit widgets"""
@@ -121,7 +127,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             
             cursor.execute(update_SQL, [product.quantity])
             cursor.execute(insert_SQL, [None, self.username, now, 
-                            product.name, product.quantity, product.price])
+                            product.name, product.quantity, product.subtotal])
 
             print('Success')
     
