@@ -1,5 +1,7 @@
-from PyQt5.QtWidgets import QMainWindow, QDialog, QFrame
+from PyQt5.QtWidgets import QMainWindow, QDialog, QFrame, QTextEdit
 from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
+from PyQt5 import QtPrintSupport
+
 import datetime
 # import tempfile
 
@@ -31,10 +33,13 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.username = username
         self.context = context
         self.setupUi(self)
+        self.setWindowIcon(self.context.window_icon)
         self.get_product_list()
 
         self.username_label.setText(self.username.title())
         self.actionLog_Out.setIcon(self.context.logout_icon)
+        self.actionAbout.setIcon(self.context.about_icon)
+        self.actionAbout.triggered.connect(self.context.show_about)
         
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
@@ -42,6 +47,8 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
         self.items_combobox.currentTextChanged.connect(self.add_to_checkout)
         self.done_button.clicked.connect(self.checkout)
+
+
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -109,8 +116,6 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
                 )
             )
         
-
-# TODO: FIX Widgets positioning in checkout
 
     def update_database(self, product):
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -289,3 +294,35 @@ class CheckoutConfirmationDialog(QDialog, Ui_checkout_dialog):
     def __init__(self, *args, **kwargs):
         super(CheckoutConfirmationDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.editor = QTextEdit()
+
+    def accept(self):
+        super().accept()
+        self.editor.append("{:<10}|{:^8}|{:>5}".format("Product", "Quantity", "Total"))
+        
+        for product in SalesWindow.products_in_checkout:
+            Header = f"{product.name[:10]:^10}|{product.quantity:^8}|{product.subtotal:^10}"
+            self.editor.append(Header)
+
+
+        self.editor.append("\nTotal:{:>22}".format(str(
+                sum(
+                    product.subtotal for product in SalesWindow.products_in_checkout
+                )
+            )))
+        
+        
+        self.handle_preview()
+        
+    def create_checkout_receipt(self):
+        pass
+
+    def handle_print(self):
+        dialog = QtPrintSupport.QPrintDialog()
+        if dialog.exec_() == QDialog.Accepted:
+            self.editor.document().print_(dialog.printer())
+    
+    def handle_preview(self):
+        dialog = QtPrintSupport.QPrintPreviewDialog()
+        dialog.paintRequested.connect(self.editor.print_)
+        dialog.exec_()

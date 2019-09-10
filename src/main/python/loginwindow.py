@@ -19,6 +19,10 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         self.login_button.clicked.connect(self.authenticate_user)
         self.actionAbout.setIcon(self.context.about_icon)
 
+        self.actionAbout.triggered.connect(self.context.show_about)
+
+        self.setWindowIcon(self.context.window_icon)
+
     def authenticate_user(self):
         username = self.username_line_edit.text()
         password = self.password_line_edit.text()

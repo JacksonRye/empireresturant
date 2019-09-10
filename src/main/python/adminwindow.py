@@ -20,9 +20,12 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         
         self.context = context
         self.setupUi(self)      # create widgets from Ui_MainWindow
+        self.setWindowIcon(self.context.window_icon)
         self.load_tables()      # create tables from database
 
         self.actionAbout.setIcon(self.context.about_icon)
+        self.actionAbout.triggered.connect(self.context.show_about)
+        
         self.actionLog_Out.setIcon(self.context.logout_icon)
         self.actionLog_Out.triggered.connect(self.logout)
 
