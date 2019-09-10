@@ -28,13 +28,13 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.username = username
         self.context = context
         self.setupUi(self)
+        self.get_product_list()
+
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
         self.populate_combobox()
-        self.get_product_list()
 
-        self.items_combobox.currentIndexChanged[str].\
-            connect(self.add_to_checkout)
+        self.items_combobox.currentTextChanged.connect(self.add_to_checkout)
         self.done_button.clicked.connect(self.checkout)
 
     def logout(self):
@@ -70,19 +70,23 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.items_combobox.setModel(model)
         self.items_combobox.setModelColumn(column)
 
-    def add_to_checkout(self, product_name):
-
+    def add_to_checkout(self, currenttext):
         # check if product already in checkout
         for product in self.product_list:
-            if not product.in_checkout:
-                product.in_checkout = True
-                self.products_in_checkout.add(product)
-                self.add_create_product_layout(product)
+            if product.name == currenttext: 
+                break
+            
+        self.process_product(product)
 
-                
+    def process_product(self, product):
+        if not product.in_checkout:
+            product.in_checkout = True
+            self.products_in_checkout.add(product)
+            self.add_create_product_layout(product)
+   
     
     def add_create_product_layout(self, product):
-        item = CheckoutFrame(product)
+        item = CheckoutFrame(product, self.context)
         item.no_label.setText(str(0))
         self.checkout_layout.addWidget(item)
 
@@ -117,7 +121,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         
     def clear_screen(self):
         for product in self.products_in_checkout:
-            product.in_checkout = False
+            reset(product)
         
         self.products_in_checkout.clear()
         
@@ -129,7 +133,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
             results = cursor.fetchall()
 
             # Genexpr to get all items from database
-            self.product_list = (self._Product(*value) for _, value in enumerate(results))
+            self.product_list = [self._Product(*value) for _, value in enumerate(results)]
 
     class _Product:
         """
@@ -168,8 +172,7 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
 
-    def accept(self):
-        super().accept()
+    def get_results(self):
 
         # If you press 'Ok' button I'll run.
         from_ = self.from_datetime_edit
@@ -178,8 +181,6 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
         from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
         to_date = to.textFromDateTime(to.dateTime())            # Ending date
         print(from_date)
-
-        # print('{} to {}'.format(from_date, to_date))
 
         with DBHandler(self.context.get_database) as cursor:
 
@@ -198,6 +199,11 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
                 print(values)
 
 
+
+    def accept(self):
+        super().accept()
+        self.get_results()
+
 class CheckoutFrame(QFrame, Ui_checkout_frame):
     """
         Widget to hold each product in the checkout
@@ -206,18 +212,47 @@ class CheckoutFrame(QFrame, Ui_checkout_frame):
                     contains product metadata.
     """
 
-    def __init__(self, product, *args, **kwargs):
+    def __init__(self, product, context, *args, **kwargs):
         super(CheckoutFrame, self).__init__(*args, **kwargs)
-        self.setupUi(self)
+        self.product = product
+        self.context = context
 
-        # self.number += 1
-        self.name = product.name
-        self.price = product.price
-        self.quantity = product.quantity
-        self.total = product.subtotal
+        self.setupUi(self)
+        self.delete_button.setIcon(self.context.cancel_icon)
+
+
 
         # self.no_label.setText(str(self.number))
-        self.name_label.setText(self.name)
-        self.price_label.setText(str(self.price))
-        self.qty_line_edit.setText(str(self.quantity))
-        self.subtotal_label.setText(str(self.total))
+        self.name_label.setText(self.product.name)
+        self.price_label.setText(str(self.product.price))
+        self.qty_line_edit.setText(str(self.product.quantity))
+        self.subtotal_label.setText(str(self.product.subtotal))
+        
+
+        self.add_qty_btn.clicked.connect(self.add_quantity)
+        self.sub_qty_btn.clicked.connect(self.sub_quantity)
+        self.delete_button.clicked.connect(self.remove_product)
+
+    def add_quantity(self):
+        self.product.quantity += 1
+        self.update_price_label()
+
+    def sub_quantity(self):
+        if self.product.quantity > 0:
+            self.product.quantity -= 1
+            self.update_price_label()
+
+    def update_price_label(self):
+        self.qty_line_edit.setText(str(self.product.quantity))
+        self.subtotal_label.setText(str(self.product.subtotal))
+
+
+    def remove_product(self):
+        reset(self.product)
+        self.deleteLater()
+        self.setParent(None)
+
+
+def reset(product):
+    product.in_checkout = False
+    product.quantity = 0
