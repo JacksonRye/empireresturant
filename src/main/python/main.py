@@ -11,11 +11,15 @@ class MyApplicationContext(ApplicationContext):
 
     @cached_property
     def about_icon(self):
-        return QIcon(self.get_resource('images/anchor.png'))
+        return QIcon(self.get_resource('icons/anchor.png'))
 
     @cached_property
     def get_database(self):
         return self.get_resource('database/resturant_database.db')
+
+    @cached_property
+    def cancel_icon(self):
+        return QIcon(self.get_resource('icons/cross-button.png'))
 
 
 appctxt = MyApplicationContext()     # 1. Instantiate ApplicationContext

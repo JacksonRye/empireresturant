@@ -30,8 +30,96 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-project-empire-s-documentation">
-<h1>Welcome to Project Empire’s documentation!<a class="headerlink" href="#welcome-to-project-empire-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-saleswindow">
+<span id="welcome-to-project-empire-s-documentation"></span><h1>Welcome to Project Empire’s documentation!<a class="headerlink" href="#module-saleswindow" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="saleswindow.CheckoutFrame">
+<em class="property">class </em><code class="sig-prename descclassname">saleswindow.</code><code class="sig-name descname">CheckoutFrame</code><span class="sig-paren">(</span><em class="sig-param">product</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.CheckoutFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QFrame</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ui_designs.Ui_checkout_widget.Ui_checkout_frame</span></code></p>
+<p>Widget to hold each product in the checkout</p>
+<dl class="simple">
+<dt>product:    Instance of _Product class,</dt><dd><p>contains product metadata.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="saleswindow.ClosingSalesDialog">
+<em class="property">class </em><code class="sig-prename descclassname">saleswindow.</code><code class="sig-name descname">ClosingSalesDialog</code><span class="sig-paren">(</span><em class="sig-param">context</em>, <em class="sig-param">username</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.ClosingSalesDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ui_designs.Ui_closingsalesdialog.Ui_Dialog</span></code></p>
+<p>Dialog that show up when closing sales button is pressed.
+Allows user to selecting duration of closing and prints
+information concerning it.</p>
+<dl class="method">
+<dt id="saleswindow.ClosingSalesDialog.accept">
+<code class="sig-name descname">accept</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.ClosingSalesDialog.accept" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="saleswindow.SalesWindow">
+<em class="property">class </em><code class="sig-prename descclassname">saleswindow.</code><code class="sig-name descname">SalesWindow</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">context</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ui_designs.Ui_salewindow.Ui_MainWindow</span></code></p>
+<dl class="simple">
+<dt>username:   current user login, whose name transactions</dt><dd><p>will be carried on with</p>
+</dd>
+<dt>context:    The Application context that controls the whole</dt><dd><p>app and contains all resources</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="saleswindow.SalesWindow.add_to_checkout">
+<code class="sig-name descname">add_to_checkout</code><span class="sig-paren">(</span><em class="sig-param">product_name</em><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.add_to_checkout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.checkout">
+<code class="sig-name descname">checkout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.checkout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.clear_screen">
+<code class="sig-name descname">clear_screen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.clear_screen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.connect_database">
+<code class="sig-name descname">connect_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.connect_database" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.get_product_list">
+<code class="sig-name descname">get_product_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.get_product_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.logout">
+<code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.logout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.perform_transaction">
+<code class="sig-name descname">perform_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.perform_transaction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.populate_combobox">
+<code class="sig-name descname">populate_combobox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.populate_combobox" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="saleswindow.SalesWindow.products_in_checkout">
+<code class="sig-name descname">products_in_checkout</code><em class="property"> = {}</em><a class="headerlink" href="#saleswindow.SalesWindow.products_in_checkout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="saleswindow.SalesWindow.select_duration">
+<code class="sig-name descname">select_duration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#saleswindow.SalesWindow.select_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a dialog containg two datetime edit widgets</p>
+</dd></dl>
+
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 </div>
 <table class="longtable docutils align-default">
@@ -49,19 +137,11 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#module-saleswindow" title="saleswindow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saleswindow</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">saleswindow.SalesWindow</span></code>(username, context, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#saleswindow.SalesWindow" title="saleswindow.SalesWindow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saleswindow.SalesWindow</span></code></a>(username, context, …)</p></td>
 <td><p>username:   current user login, whose name transactions</p></td>
 </tr>
 </tbody>
 </table>
-<span class="target" id="module-saleswindow"></span><dl class="field-list simple">
-<dt class="field-odd">members</dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">undoc-members</dt>
-<dd class="field-even"><p></p></dd>
-<dt class="field-odd">show-inheritance</dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
