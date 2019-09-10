@@ -6,7 +6,8 @@ import datetime
 from loginwindow import LoginWindow
 from ui_designs.Ui_salewindow import Ui_MainWindow
 from ui_designs.Ui_closingsalesdialog import Ui_Dialog
-from ui_designs.Ui_checkout_widget import Ui_checkout_frame
+from ui_designs.Ui_product_frame import Ui_product_frame
+from ui_designs.Ui_checkout_dialog import Ui_checkout_dialog
 
 from dbhandler import DBHandler
 
@@ -22,6 +23,8 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
     products_in_checkout = set()
 
+
+
     def __init__(self, username, context, *args, **kwargs):
         super(SalesWindow, self).__init__(*args, **kwargs)
 
@@ -29,13 +32,16 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.context = context
         self.setupUi(self)
         self.get_product_list()
-
+        
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
         self.populate_combobox()
 
         self.items_combobox.currentTextChanged.connect(self.add_to_checkout)
         self.done_button.clicked.connect(self.checkout)
+        self.decorator_button.clicked.connect(self.calculate_total)
+
+
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -86,9 +92,17 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
    
     
     def add_create_product_layout(self, product):
-        item = CheckoutFrame(product, self.context)
+        item = ProductFrame(product, self.context)
         item.no_label.setText(str(0))
         self.checkout_layout.addWidget(item)
+
+    def calculate_total(self):
+        self.total_label.setText(
+            str(
+                sum(product.subtotal for product in self.products_in_checkout)
+                )
+            )
+        
 
 # TODO: FIX Widgets positioning in checkout
 
@@ -120,10 +134,15 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
         
     def clear_screen(self):
+
+        for i in reversed(range(self.checkout_layout.count())):
+            self.checkout_layout.itemAt(i).widget().setParent(None)
+
         for product in self.products_in_checkout:
             reset(product)
         
         self.products_in_checkout.clear()
+        self.total_label.setText(str('0'))
         
 
 
@@ -150,7 +169,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
         @property
         def subtotal(self):
-            return str(self.price * self.quantity)
+            return self.price * self.quantity
 
         def __str__(self):
             return str(self.name)
@@ -180,7 +199,6 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
         from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
         to_date = to.textFromDateTime(to.dateTime())            # Ending date
-        print(from_date)
 
         with DBHandler(self.context.get_database) as cursor:
 
@@ -195,8 +213,8 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
             print(result)
 
-            for _, values in enumerate(result):
-                print(values)
+            # for _, values in enumerate(result):
+            #     print(values)
 
 
 
@@ -204,7 +222,7 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
         super().accept()
         self.get_results()
 
-class CheckoutFrame(QFrame, Ui_checkout_frame):
+class ProductFrame(QFrame, Ui_product_frame):
     """
         Widget to hold each product in the checkout
 
@@ -213,7 +231,7 @@ class CheckoutFrame(QFrame, Ui_checkout_frame):
     """
 
     def __init__(self, product, context, *args, **kwargs):
-        super(CheckoutFrame, self).__init__(*args, **kwargs)
+        super(ProductFrame, self).__init__(*args, **kwargs)
         self.product = product
         self.context = context
 
@@ -246,7 +264,6 @@ class CheckoutFrame(QFrame, Ui_checkout_frame):
         self.qty_line_edit.setText(str(self.product.quantity))
         self.subtotal_label.setText(str(self.product.subtotal))
 
-
     def remove_product(self):
         reset(self.product)
         self.deleteLater()
@@ -256,3 +273,10 @@ class CheckoutFrame(QFrame, Ui_checkout_frame):
 def reset(product):
     product.in_checkout = False
     product.quantity = 0
+
+
+class CheckoutConfirmationDialog(QDialog, Ui_checkout_dialog):
+
+    def __init__(self, *args, **kwargs):
+        super(CheckoutConfirmationDialog, self).__init__(*args, **kwargs)
+        self.setupUi(self)
