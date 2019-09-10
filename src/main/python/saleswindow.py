@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QDialog, QFrame
 from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
-# import datetime
+import datetime
 # import tempfile
 
 from loginwindow import LoginWindow
@@ -31,10 +31,11 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
         self.populate_combobox()
+        self.get_product_list()
 
         self.items_combobox.currentIndexChanged[str].\
             connect(self.add_to_checkout)
-        self.done_button.clicked.connect(self.get_product_list)
+        self.done_button.clicked.connect(self.checkout)
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
@@ -42,7 +43,8 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.hide()
 
     def checkout(self):
-        pass
+        self.perform_transaction()
+        self.clear_screen()
 
     def select_duration(self):
         """Creates a dialog containg two datetime edit widgets"""
@@ -69,25 +71,57 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.items_combobox.setModelColumn(column)
 
     def add_to_checkout(self, product_name):
-        # Retrieve current attributes of products
-        self.get_product_list()
+
         # check if product already in checkout
         for product in self.product_list:
-            if str(product) == product_name and str(product) not in self.products_in_checkout:
-                product.is_active = True
-                self.products_in_checkout.add(str(product))
-                item = CheckoutFrame(product)
-                item.no_label.setText(str(0))
-                self.checkout_layout.addWidget(item)
-                print(product_name)
+            if not product.in_checkout:
+                product.in_checkout = True
+                self.products_in_checkout.add(product)
+                self.add_create_product_layout(product)
+
+                
+    
+    def add_create_product_layout(self, product):
+        item = CheckoutFrame(product)
+        item.no_label.setText(str(0))
+        self.checkout_layout.addWidget(item)
 
 # TODO: FIX Widgets positioning in checkout
 
-    def perform_transaction(self):
-        pass
+    def update_database(self, product):
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        
+        with DBHandler(self.context.get_database) as cursor:
+            update_SQL = """
+                    UPDATE products SET 
+                    quantity_in_stock = quantity_in_stock - ?
+                    """
 
+            insert_SQL = """
+                            INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?)
+                        """
+            
+            cursor.execute(update_SQL, [product.quantity])
+            cursor.execute(insert_SQL, [None, self.username, now, 
+                            product.name, product.quantity, product.price])
+
+            print('Success')
+    
+    def perform_transaction(self):
+        for product in self.products_in_checkout:
+            self.update_database(product)
+            product.in_checkout = False
+            product.quantity = 0
+        
+
+        
     def clear_screen(self):
-        pass
+        for product in self.products_in_checkout:
+            product.in_checkout = False
+        
+        self.products_in_checkout.clear()
+        
+
 
     def get_product_list(self):
         with DBHandler(self.context.get_database) as cursor:
@@ -105,14 +139,14 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
 
         def __init__(self, name, price, remaining_stock):
             self.name = name
-            self.qty = 0
+            self.quantity = 0
             self.price = price
             self.remaining_stock = remaining_stock
-            self.is_active = False
+            self.in_checkout = False
 
         @property
         def subtotal(self):
-            return str(self.price * self.qty)
+            return str(self.price * self.quantity)
 
         def __str__(self):
             return str(self.name)
@@ -143,6 +177,7 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
         from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
         to_date = to.textFromDateTime(to.dateTime())            # Ending date
+        print(from_date)
 
         # print('{} to {}'.format(from_date, to_date))
 
@@ -178,11 +213,11 @@ class CheckoutFrame(QFrame, Ui_checkout_frame):
         # self.number += 1
         self.name = product.name
         self.price = product.price
-        self.qty = product.qty
+        self.quantity = product.quantity
         self.total = product.subtotal
 
         # self.no_label.setText(str(self.number))
         self.name_label.setText(self.name)
         self.price_label.setText(str(self.price))
-        self.qty_line_edit.setText(str(self.qty))
+        self.qty_line_edit.setText(str(self.quantity))
         self.subtotal_label.setText(str(self.total))
