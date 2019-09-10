@@ -92,7 +92,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
    
     
     def add_create_product_layout(self, product):
-        item = ProductFrame(product, self.context)
+        item = ProductFrame(product, self.context, self)
         item.no_label.setText(str(0))
         self.checkout_layout.addWidget(item)
 
@@ -230,10 +230,11 @@ class ProductFrame(QFrame, Ui_product_frame):
                     contains product metadata.
     """
 
-    def __init__(self, product, context, *args, **kwargs):
+    def __init__(self, product, context, root, *args, **kwargs):
         super(ProductFrame, self).__init__(*args, **kwargs)
         self.product = product
         self.context = context
+        self.saleswindow = root
 
         self.setupUi(self)
         self.delete_button.setIcon(self.context.cancel_icon)
@@ -263,11 +264,13 @@ class ProductFrame(QFrame, Ui_product_frame):
     def update_price_label(self):
         self.qty_line_edit.setText(str(self.product.quantity))
         self.subtotal_label.setText(str(self.product.subtotal))
+        self.saleswindow.calculate_total()
 
     def remove_product(self):
         reset(self.product)
         self.deleteLater()
         self.setParent(None)
+        self.update_price_label()
 
 
 def reset(product):
