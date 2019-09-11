@@ -18,6 +18,13 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="3" column="1" alignment="Qt::AlignTop">
       <widget class="QDateTimeEdit" name="to_datetime_edit">
+       <property name="date">
+        <date>
+         <year>2019</year>
+         <month>9</month>
+         <day>21</day>
+        </date>
+       </property>
        <property name="displayFormat">
         <string>yyyy-MM-dd hh:mm</string>
        </property>
@@ -28,6 +35,23 @@
      </item>
      <item row="3" column="0">
       <widget class="QDateTimeEdit" name="from_datetime_edit">
+       <property name="dateTime">
+        <datetime>
+         <hour>0</hour>
+         <minute>0</minute>
+         <second>0</second>
+         <year>2019</year>
+         <month>9</month>
+         <day>1</day>
+        </datetime>
+       </property>
+       <property name="date">
+        <date>
+         <year>2019</year>
+         <month>9</month>
+         <day>1</day>
+        </date>
+       </property>
        <property name="currentSection">
         <enum>QDateTimeEdit::YearSection</enum>
        </property>

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QDialog, QFrame, QTextEdit
 from PyQt5.QtSql import QSqlTableModel, QSqlDatabase
 from PyQt5 import QtPrintSupport
+from PyQt5.QtCore import QDateTime
 
 import datetime
 # import tempfile
@@ -202,15 +203,31 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
         self.context = context
         self.username = username
         self.setupUi(self)
+        self.set_date()
+        self.editor = QTextEdit()
 
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
 
-    def get_results(self):
+    def set_date(self):
+        now = QDateTime.currentDateTime()
 
         # If you press 'Ok' button I'll run.
+
+        self.from_datetime_edit.setDateTime(now)
+        self.to_datetime_edit.setDateTime(now)
+
+    def get_results(self):
+
         from_ = self.from_datetime_edit
         to = self.to_datetime_edit
+
+
+        # from_.setDateTime(now)
+
+        # to = to.dateTimeFromText(now)
+
+
 
         from_date = from_.textFromDateTime(from_.dateTime())    # Starting date
         to_date = to.textFromDateTime(to.dateTime())            # Ending date
@@ -224,9 +241,23 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
                             [self.username, from_date, to_date])
 
-            result = cursor.fetchall()
+            products_result = cursor.fetchall()
 
-            print(result)
+
+            cursor.execute("""SELECT sum(price)
+                            FROM `orders` WHERE username = ? 
+                            AND `date` BETWEEN ? AND ?""",
+                            
+                            [self.username, from_date, to_date])        
+
+            total_result = cursor.fetchone()
+
+
+            # print(products_result)
+
+            return products_result, total_result
+
+            # cursor.execute()
 
             # for _, values in enumerate(result):
             #     print(values)
@@ -235,7 +266,25 @@ class ClosingSalesDialog(QDialog, Ui_Dialog):
 
     def accept(self):
         super().accept()
-        self.get_results()
+        products_result, total_result = self.get_results()
+
+        for values in products_result:
+            name, quantity, total = values
+
+            line = f"{name[:8]:-<10}{quantity:-^5}{total:->5}"
+            self.editor.append(line)
+
+        self.editor.append('Total:{:->25}'.format(str(total_result)))
+
+        self.handle_preview()
+
+
+    def handle_preview(self):
+        dlg = QtPrintSupport.QPrintPreviewDialog()
+        dlg.paintRequested.connect(self.editor.print_)
+        dlg.exec_()
+
+
 
 class ProductFrame(QFrame, Ui_product_frame):
     """
@@ -302,14 +351,15 @@ class CheckoutConfirmationDialog(QDialog, Ui_checkout_dialog):
 
     def accept(self):
         super().accept()
-        self.editor.append("{:<10}|{:^8}|{:>5}".format("Product", "Quantity", "Total"))
+        # self.editor.append("{:<10}|{:^2}|{:>4}".format("Product", "Qty", "Total"))
         
         for product in SalesWindow.products_in_checkout:
-            Header = f"{product.name[:10]:^10}|{product.quantity:^8}|{product.subtotal:^10}"
-            self.editor.append(Header)
+            if product.quantity >= 1:
+                Header = f"{product.name[:8]:-<10}{product.quantity:-^2}{product.subtotal:->4}"
+                self.editor.append(Header)
 
 
-        self.editor.append("\nTotal:{:>22}".format(str(
+        self.editor.append("\nTotal:{:->22}".format(str(
                 sum(
                     product.subtotal for product in SalesWindow.products_in_checkout
                 )

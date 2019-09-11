@@ -38,11 +38,12 @@ class MyApplicationContext(ApplicationContext):
         return QIcon(self.get_resource('icons/restaurant64.png'))
 
 
+if __name__ == '__main__':
+    
+    appctxt = MyApplicationContext()     # 1. Instantiate ApplicationContext
 
-appctxt = MyApplicationContext()     # 1. Instantiate ApplicationContext
+    window = LoginWindow(appctxt)
+    window.show()
 
-window = LoginWindow(appctxt)
-window.show()
-
-exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
-sys.exit(exit_code)
+    exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
+    sys.exit(exit_code)
