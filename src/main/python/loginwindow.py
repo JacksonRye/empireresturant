@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow
 
 from dbhandler import DBHandler
 from ui_designs.Ui_loginwindow import Ui_MainWindow
+from about_dialog import AboutDialog
 
 
 class LoginWindow(QMainWindow, Ui_MainWindow):
@@ -19,9 +20,13 @@ class LoginWindow(QMainWindow, Ui_MainWindow):
         self.login_button.clicked.connect(self.authenticate_user)
         self.actionAbout.setIcon(self.context.about_icon)
 
-        self.actionAbout.triggered.connect(self.context.show_about)
+        self.actionAbout.triggered.connect(self.show_about)
 
         self.setWindowIcon(self.context.window_icon)
+
+    def show_about(self):
+        dlg = AboutDialog(self.context, self)
+        dlg.exec_()
 
     def authenticate_user(self):
         username = self.username_line_edit.text()

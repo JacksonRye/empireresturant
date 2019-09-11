@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMainWindow
 
 from loginwindow import LoginWindow
 from ui_designs.Ui_adminwindow import Ui_MainWindow
+from about_dialog import AboutDialog
 
 
 class AdminWindow(QMainWindow, Ui_MainWindow):
@@ -24,7 +25,7 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
         self.load_tables()      # create tables from database
 
         self.actionAbout.setIcon(self.context.about_icon)
-        self.actionAbout.triggered.connect(self.context.show_about)
+        self.actionAbout.triggered.connect(self.show_about)
         
         self.actionLog_Out.setIcon(self.context.logout_icon)
         self.actionLog_Out.triggered.connect(self.logout)
@@ -40,6 +41,10 @@ class AdminWindow(QMainWindow, Ui_MainWindow):
             lambda: self.users_model.removeRow(
                 self.user_table_view.currentIndex().row()
         ))
+
+    def show_about(self):
+        dlg = AboutDialog(self.context, self)
+        dlg.exec_()
 
     def load_tables(self):
         self.connect_database()

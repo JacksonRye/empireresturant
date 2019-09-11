@@ -10,6 +10,7 @@ from ui_designs.Ui_salewindow import Ui_MainWindow
 from ui_designs.Ui_closingsalesdialog import Ui_Dialog
 from ui_designs.Ui_product_frame import Ui_product_frame
 from ui_designs.Ui_checkout_dialog import Ui_checkout_dialog
+from about_dialog import AboutDialog
 
 from dbhandler import DBHandler
 
@@ -39,7 +40,7 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.username_label.setText(self.username.title())
         self.actionLog_Out.setIcon(self.context.logout_icon)
         self.actionAbout.setIcon(self.context.about_icon)
-        self.actionAbout.triggered.connect(self.context.show_about)
+        self.actionAbout.triggered.connect(self.show_about)
         
         self.actionLog_Out.triggered.connect(self.logout)
         self.closing_sales_button.clicked.connect(self.select_duration)
@@ -48,7 +49,10 @@ class SalesWindow(QMainWindow, Ui_MainWindow):
         self.items_combobox.currentTextChanged.connect(self.add_to_checkout)
         self.done_button.clicked.connect(self.checkout)
 
-
+    
+    def show_about(self):
+        dlg = AboutDialog(self.context, self)
+        dlg.exec_()
 
     def logout(self):
         self.loginwindow = LoginWindow(self.context)
